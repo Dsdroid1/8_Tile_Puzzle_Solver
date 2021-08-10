@@ -1,0 +1,10 @@
+### Assignment 1 
+* Implement the 8-tile puzzle using `Bi-directional search`
+* For less credits, use `IDS`
+* Can use any language for coding it up.
+
+#### Self Notes
+* Use threads to implement the search in each direction to achieve O(b^[d/2]) time complexity
+* Also, store info about nodes encountered from only 1 side of the search
+* Maybe use locks for the shared data structure that has the 'closed' nodes
+* Before proceeding, make the parity test to see if goal state is attainable
