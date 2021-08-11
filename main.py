@@ -185,6 +185,7 @@ def agent(goal_config, instance):
         print('Current state:')
         visualize_state(state['config']) 
         print(f'Action required from previous state:{state["action_from_parent"]}')
+        print("")
 
 # The driver code that runs the program
 if __name__ == "__main__":
