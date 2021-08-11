@@ -28,13 +28,14 @@ def check_solvable(instance, goal_state):
 # Helper function to visualize the state of the 8 tile puzzle
 def visualize_state(current_state):
     for i in range(0, len(current_state)):
-        if i % 3 == 0:
+        if i % 3 == 0 and i != 0:
             print("")
         print(current_state[i], end=" ")
     print("")
 
 # Helper function to return a unique numeric value associated with every possible config
 def numeric_of_state(current_config):
+    # This function will help in generating a unique numeric key associated with each state, for storing in a hash map
     value = 0
     place_value = 1 
     for i in reversed(range(0, len(current_config))):
@@ -111,8 +112,8 @@ def bidirectional_search(forward_fringe_list, backward_fringe_list, closed_list)
                 # Check if this state was already visited by the forward search
                 if closed_list.get(numeric_of_state(current_backward_state['config'])) is not None:
                     # Solution has been found
-                    # TODO: Call a routine to trace the path
                     found = True
+                    # Get the same node generated from the forward direction
                     intersection_node = closed_list.get(numeric_of_state(current_backward_state['config']))
                 else:
                     # Consider this state for expansion on reverse direction
@@ -124,23 +125,19 @@ def bidirectional_search(forward_fringe_list, backward_fringe_list, closed_list)
     initial_to_intersection_path = []
     intersection_to_goal_path = []
     path_tracing_node = intersection_node
-    #DEBUG
-    # print(path_tracing_node)
-    # print(closed_list)
-    # print(current_backward_state)
+    # Trace the path from the initial state to the intersection node
     while path_tracing_node is not None:
         initial_to_intersection_path.append(path_tracing_node)
         path_tracing_node = path_tracing_node['parent']
         depth += 1
     initial_to_intersection_path.reverse()
-    # print(initial_to_intersection_path)
+
+    # Now, create the path from intersection to goal, and also invert the parent direction from backward to forward
     reverse_path_tracing_node = current_backward_state['parent']
-    # print('Init,', reverse_path_tracing_node)
-    # print(reverse_path_tracing_node)
     # Contains the parent according to the forward direction, for the backward search list
     previous_node = current_backward_state
     previous_node.update({'parent':initial_to_intersection_path[-1]})
-    # print('Prev_node',previous_node)
+    # Stores the action required to move in backward direction from node to parent, and hence will be inverted to get the movement in forward direction
     action_from_parent = current_backward_state['action_from_parent']
     while reverse_path_tracing_node is not None:
         # Invert the stats
@@ -160,17 +157,16 @@ def bidirectional_search(forward_fringe_list, backward_fringe_list, closed_list)
         elif action_from_parent == 'right':
             reverse_path_tracing_node.update({'action_from_parent':'left'})
         action_from_parent = next_node_reversed_action
-        # print(reverse_path_tracing_node)
-        # print(reverse_path_tracing_node['parent'])
         intersection_to_goal_path.append(reverse_path_tracing_node)
         reverse_path_tracing_node = parent_node_in_reverse_direction
         depth += 1
-    # print(intersection_to_goal_path)
+    # Combine the 2 lists
     initial_to_intersection_path.extend(intersection_to_goal_path)
     solution_states = initial_to_intersection_path
+    # Return the solution states
     return solution_states
 
-# The code for the problem-solving/search-based agent
+# The code for the problem-solving/search-based agent using bi-directional search
 def agent(goal_config, instance):
     # For each state, we will store config, parent, depth(here it is equal to cost) and action taken from parent state
     initial_state = {'config': instance, 'parent': None, 'depth': 0, "action_from_parent": None}
@@ -179,11 +175,13 @@ def agent(goal_config, instance):
     # Both fringe lists are sorted by the depth from the respective initial configs
     forward_fringe_list = [initial_state]
     backward_fringe_list = [goal_state]
+    # The closed list will be a hashmap of states, where the key will be the numeric value of the state config
     closed_list = {}
     solution = bidirectional_search(forward_fringe_list, backward_fringe_list, closed_list)
     # Print the solution
     print(f'No.of moves required:{len(solution)-1}')
     for state in solution:
+        print(f'Depth: {state["depth"]}')
         print('Current state:')
         visualize_state(state['config']) 
         print(f'Action required from previous state:{state["action_from_parent"]}')
@@ -203,7 +201,6 @@ if __name__ == "__main__":
     solvable = check_solvable(instance, goal_config)
     if solvable:
         print('This instance can be solved')
-        # TODO: Call the agent here
         agent(goal_config, instance)
     else:
         print('Error! The given instance is not solvable and the program will terminate')

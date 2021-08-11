@@ -8,3 +8,9 @@
 * Also, store info about nodes encountered from only 1 side of the search
 * Maybe use locks for the shared data structure that has the 'closed' nodes
 * Before proceeding, make the parity test to see if goal state is attainable
+
+
+#### Stuff remaining
+* Add input validation(0-8)
+* Improve output format
+* Improve comments
