@@ -18,7 +18,7 @@ def check_solvable(instance, goal_state):
             if instance[i] != 0 and instance[j] != 0 and instance[j] < instance[i]:
                 inversions_instance += 1
             if goal_state[i] != 0 and goal_state[j] != 0 and goal_state[j]< goal_state[i]:
-                goal_state += 1
+                inversions_goal += 1
     solvable = False
     # The parity of inversions of instance and goal must be same
     if inversions_instance % 2 == inversions_goal % 2:
