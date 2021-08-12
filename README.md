@@ -23,6 +23,17 @@ Once the config is supplied, we check if converting it to the goal state is poss
 - `Time Complexity` - `O(b^[d/2])` (as we explore from both sides, and hence require d/2 depth from each side)
 - `Space Complexity` - `O(b^[d/2])`
 
+#### Data Structures Used
+
+- `Fringe list`(Containing yet to be explored nodes) - List data type of python, each element containing:
+  - `config` : State representation of the 8-tile puzzle
+  - `parent` : Parent node, that resulted in creation of this node
+  - `action_from_parent` : Action to take from the parent state to reach this state
+  - `depth` : The depth at which the config occurs, also equal to the path cost for this case.
+- `Closed list`(Containing already expanded nodes from one direction) - Python dictionary (hashmap) with:
+  - `key` : Numeric value of the state array
+  - `value` : Node, containing all data mentioned in an element of a fringe list.
+
 #### Output Format
 
 The solution, if exists is printed with a step-by-step guide to reach the goal config
