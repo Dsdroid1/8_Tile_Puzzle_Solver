@@ -36,7 +36,7 @@ Once the config is supplied, we check if converting it to the goal state is poss
 
 #### Output Format
 
-The solution, if exists is printed with a step-by-step guide to reach the goal config
+The solution, if exists is printed with a step-by-step guide to reach the goal config, along with the number of states generated and expanded by bi-directional search, while figuring the solution.
 We print the details about each step, including :
 
 - The depth of the step
